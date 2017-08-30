@@ -13,7 +13,7 @@ spec:
       hostNetwork: true
       containers:
       - image: pbench-agent
-        name: pbench-agent
+        name: docker.io/ravielluri/image:agent
         imagePullPolicy: "IfNotPresent"
         securityContext:
           privileged: true
