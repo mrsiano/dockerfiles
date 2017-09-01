@@ -1,9 +1,0 @@
-[Unit]
-Description=collectd-wrapper daemon
-
-[Service]
-ExecStart=/root/collectd/script.sh
-StandardOutput=null
-
-[Install]
-WantedBy=multi-user.target

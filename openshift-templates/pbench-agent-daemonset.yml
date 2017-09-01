@@ -13,7 +13,7 @@ spec:
       hostNetwork: true
       containers:
       - image: pbench-agent
-        name: docker.io/ravielluri/image:agent
+        name: pbench-agent
         imagePullPolicy: "IfNotPresent"
         securityContext:
           privileged: true
@@ -24,6 +24,8 @@ spec:
             mountPath: /proc_host
           - name: ssh-keys
             mountPath: /root/.ssh
+          - name: admin-keys
+            mountPath: /etc/origin/master
         ports:
           - containerPort: 2022
       volumes:
@@ -36,5 +38,8 @@ spec:
         - name: ssh-keys
           hostPath:
             path: /root/.ssh
+        - name: admin-keys
+          hostPath: 
+            path: /var/run/pbench/keys
       nodeSelector: 
         type: pbench

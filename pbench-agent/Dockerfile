@@ -39,6 +39,7 @@ RUN yum install -y initscripts && yum clean all
 
 # Mount /proc
 COPY mount.sh /root/mount.sh
+RUN chmod +x /root/mount.sh
 COPY pbench-pod.service /etc/systemd/system/pbench-pod.service
 RUN systemctl enable pbench-pod.service
 
