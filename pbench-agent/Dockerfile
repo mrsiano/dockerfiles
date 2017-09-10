@@ -12,7 +12,8 @@ RUN curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench-interim/repo/e
 
 # Install ansible
 RUN mkdir -p /root/.ssh 
-RUN rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y ansible
+RUN rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y ansible python-pip
+RUN pip install requests
 
 #Setting up systemd
 ENV container docker
