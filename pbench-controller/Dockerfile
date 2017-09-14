@@ -33,6 +33,9 @@ EXPOSE 2022
 # initscripts
 RUN yum install -y initscripts && yum clean all
 
+# Expose 9090 for http tests
+EXPOSE 9090
+
 # Run pbench as service
 COPY pbench.service /etc/systemd/system/pbench.service
 RUN systemctl enable pbench.service

@@ -25,9 +25,9 @@ spec:
           - name: ssh-keys
             mountPath: /root/.ssh
           - name: admin-keys
-            mountPath: /etc/origin/master
+            mountPath: /var/run/pbench/keys
           - name: certs
-            mountPath: /etc/pki/tls/certs/
+            mountPath: /etc/pki
         ports:
           - containerPort: 2022
       volumes:
@@ -42,9 +42,9 @@ spec:
             path: /root/.ssh
         - name: admin-keys
           hostPath: 
-            path: /var/run/pbench/keys
+            path: /etc/origin/master
         - name: certs
           hostPath:
-            path: /etc/pki/tls/certs
+            path: /etc/pki
       nodeSelector: 
         type: pbench
