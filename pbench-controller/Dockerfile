@@ -12,7 +12,7 @@ RUN curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench-interim/repo/e
 
 # Install ansible and other dependencies
 RUN mkdir -p /root/.ssh 
-RUN rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y ansible
+RUN rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y ansible which
 RUN yum -y install bind-utils blktrace ethtool findutils git gnuplot golang httpd-tools hwloc iotop iptables-services kernel ltrace mailx maven netsniff-ng net-tools ntp ntpdate numactl pciutils perf python-docker-py python-flask python-pip python-rbd python2-boto3 powertop psmisc rpm-build screen sos strace tar tcpdump tmux vim-enhanced xauth wget yum-utils rpmdevtools ceph-common glusterfs-fuse iscsi-initiator-utils
 
 ## set GOPATH
