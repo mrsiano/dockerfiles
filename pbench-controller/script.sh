@@ -23,7 +23,7 @@ benchmark_status=$?
 if [[ "${move_results}" == "true" ]] || [[ "${move_results}" == "True" ]]; then
         pbench-move-results
 fi
-if [[ "$?" == 0 ]]; then
+if [[ "$benchmark_status" == 0 ]]; then
 	echo "-----------------------------------------------------------"
 	echo "OCP SCALE TEST COMPLETED"
 	echo "-----------------------------------------------------------"
