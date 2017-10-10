@@ -37,6 +37,8 @@ RUN yum install -y initscripts && yum clean all
 EXPOSE 9090
 
 # Run pbench as service
+COPY register.sh /root/pbench/contrib/ansible/openshift/register.sh
+RUN chmod +x /root/pbench/contrib/ansible/openshift/register.sh
 COPY pbench.service /etc/systemd/system/pbench.service
 RUN systemctl enable pbench.service
 ENTRYPOINT ["/usr/sbin/init"]

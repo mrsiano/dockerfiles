@@ -41,8 +41,8 @@ RUN yum install -y initscripts && yum clean all
 # Mount /proc
 COPY mount.sh /root/mount.sh
 COPY prometheus-metrics /opt/pbench-agent/tool-scripts/prometheus-metrics
-COPY pprof /opt/pbench-agent/tool-scripts/pprof
 RUN chmod +x /opt/pbench-agent/tool-scripts/prometheus-metrics
+RUN chmod +x /opt/pbench-agent/tool-scripts/pprof
 RUN chmod +x /root/mount.sh
 COPY pbench-pod.service /etc/systemd/system/pbench-pod.service
 RUN systemctl enable pbench-pod.service
