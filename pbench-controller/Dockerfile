@@ -21,24 +21,19 @@ RUN mkdir -p /root/.go && echo "GOPATH=/root/.go" >> ~/.bashrc && echo "export G
 RUN mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg
 WORKDIR /root
 RUN git clone https://github.com/distributed-system-analysis/pbench.git && git clone https://github.com/openshift/svt.git
-COPY script.sh script.sh
-RUN chmod +x script.sh 
+COPY run.sh run.sh
+RUN chmod +x run.sh 
 
-# Setup sshd
-RUN yum install -y openssh-server openssh-clients && yum clean all
+# Setup sshd, initscripts
+RUN yum install -y openssh-server openssh-clients initscripts && yum clean all
 RUN sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config
 RUN systemctl enable sshd
 EXPOSE 2022
-
-# initscripts
-RUN yum install -y initscripts && yum clean all
 
 # Expose 9090 for http tests
 EXPOSE 9090
 
 # Run pbench as service
-COPY register.sh /root/pbench/contrib/ansible/openshift/register.sh
-RUN chmod +x /root/pbench/contrib/ansible/openshift/register.sh
 COPY pbench.service /etc/systemd/system/pbench.service
 RUN systemctl enable pbench.service
 ENTRYPOINT ["/usr/sbin/init"]

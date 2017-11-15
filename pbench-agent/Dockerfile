@@ -1,5 +1,5 @@
 #Dockerfile for pbench-agent
-FROM centos:latest
+FROM centos/tools
 MAINTAINER Ravi Elluri <nelluri@redhat.com>
 
 # Setup pbench
@@ -10,42 +10,21 @@ RUN curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench-interim/repo/e
     mv openshift*/oc /usr/local/bin && \
     rm -rf openshift-origin-client-tools-*
 
-# Install ansible
+# Install ansible, other dependencies
 RUN mkdir -p /root/.ssh 
 RUN rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum install -y ansible python-pip which
 RUN pip install requests
 
-#Setting up systemd
-ENV container docker
-RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
-RUN yum -y update; yum clean all; \
-(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*;
-VOLUME [ "/sys/fs/cgroup" ]
-
-# Setup sshd
-RUN yum install -y openssh-server openssh-clients && yum clean all
+# Setup sshd, initscripts
+RUN yum install -y openssh-server openssh-clients initscripts && yum clean all
 RUN sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config
 RUN systemctl enable sshd
 EXPOSE 2022
 
-# initscripts
-RUN yum install -y initscripts && yum clean all
-
 # Mount /proc
 COPY mount.sh /root/mount.sh
-COPY prometheus-metrics /opt/pbench-agent/tool-scripts/prometheus-metrics
-RUN chmod +x /opt/pbench-agent/tool-scripts/prometheus-metrics
-RUN chmod +x /opt/pbench-agent/tool-scripts/pprof
 RUN chmod +x /root/mount.sh
-COPY pbench-pod.service /etc/systemd/system/pbench-pod.service
-RUN systemctl enable pbench-pod.service
-
+COPY pbench.service /etc/systemd/system/pbench.service
+RUN systemctl enable pbench.service
 
 ENTRYPOINT ["/usr/sbin/init"]
