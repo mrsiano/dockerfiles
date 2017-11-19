@@ -3,6 +3,7 @@ MAINTAINER Naga Ravi Chaitanya Elluri <nelluri@redhat.com>
 
 # Install collectd and dependencies
 RUN dnf install -y git collectd collectd-disk procps && \
+    dnf clean all && \
     mkdir -p /root/collectd
 
 # setup collectd
