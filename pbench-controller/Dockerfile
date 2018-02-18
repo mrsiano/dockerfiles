@@ -5,7 +5,7 @@ MAINTAINER Naga Ravi Chaitanya Elluri <nelluri@redhat.com>
 ENV KUBECONFIG /root/.kube/config
 
 # Setup pbench, sshd, pbench-ansible, svt and install dependencies
-RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench-interim/repo/epel-7/ndokos-pbench-interim-epel-7.repo > /etc/yum.repos.d/copr-pbench.repo && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
     yum --enablerepo=ndokos-pbench-interim install -y configtools openssh-clients pbench-agent \
@@ -24,13 +24,15 @@ RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.
     curl -L https://github.com/openshift/origin/releases/download/v1.2.1/openshift-origin-client-tools-v1.2.1-5e723f6-linux-64bit.tar.gz | tar -zx && \
     mv openshift*/oc /usr/local/bin && \
     rm -rf openshift-origin-client-tools-* && \
-    git clone https://github.com/distributed-system-analysis/pbench.git && \
-    git clone https://github.com/openshift/svt.git && \
-    git clone https://github.com/chaitanyaenr/files.git /root/files && \
-    cd /root/files && git-lfs pull && \
-    mv /root/files/extended.test /root/extended.test && \
+    git clone https://github.com/distributed-system-analysis/pbench.git /root/pbench && \
+    git clone https://github.com/openshift/svt.git /root/svt && \
+    mkdir -p /usr/libexec/atomic-openshift && \
+    #git clone https://github.com/chaitanyaenr/files.git /root/files && \
+    #cd /root/files && git-lfs pull && \
+    #mv /root/files/extended.test /root/extended.test && \
     mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
     sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config && \
+    touch /etc/sysconfig/network && \
     systemctl enable sshd
 
 # Expose ports
@@ -39,5 +41,6 @@ EXPOSE 2022 9090
 # Run pbench as a service
 COPY pbench.service /etc/systemd/system/pbench.service
 COPY run.sh /root/run.sh
+RUN chmod +x /root/run.sh
 RUN systemctl enable pbench.service
 ENTRYPOINT ["/usr/sbin/init"]
