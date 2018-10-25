@@ -23,5 +23,6 @@ EXPOSE 2022
 COPY mount.sh /root/mount.sh
 COPY pbench.service /etc/systemd/system/pbench.service
 RUN systemctl enable pbench.service
+RUN mkdir -p /run/systemd/system
 
 ENTRYPOINT ["/usr/sbin/init"]
