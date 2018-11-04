@@ -13,7 +13,6 @@ pbench-clear-tools
 
 # Register tools
 ansible-playbook -i /root/inventory /root/pbench/contrib/ansible/openshift/pbench_register.yml
-
 if [[ "$?" == 0 ]]; then
         echo -e "-----------------------------------------------------------\n\n\n"
         echo -e "		PBENCH TOOLS REGISTERED SUCCESSFULLY		\n\n\n"

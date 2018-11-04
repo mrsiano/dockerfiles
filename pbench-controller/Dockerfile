@@ -6,9 +6,8 @@ ENV KUBECONFIG /root/.kube/config
 
 # Setup pbench, sshd, pbench-ansible, svt and install dependencies
 RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench-interim/repo/epel-7/ndokos-pbench-interim-epel-7.repo > /etc/yum.repos.d/copr-pbench.repo && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
-    yum --enablerepo=ndokos-pbench-interim install -y configtools openssh-clients pbench-agent \
+    curl -s https://copr.fedorainfracloud.org/coprs/ndokos/pbench/repo/epel-7/ndokos-pbench-epel-7.repo > /etc/yum.repos.d/copr-pbench.repo && \
+    yum --enablerepo=ndokos-pbench install -y configtools openssh-clients pbench-agent \
     iproute sysvinit-tools openssh-server git ansible which  bind-utils blktrace ethtool findutils \
     gnuplot golang httpd-tools hwloc iotop iptables-services kernel ltrace mailx maven netsniff-ng \
     net-tools ntp ntpdate numactl pciutils perf python-docker-py python-flask python-pip python-rbd \
@@ -27,9 +26,6 @@ RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release
     git clone https://github.com/distributed-system-analysis/pbench.git /root/pbench && \
     git clone https://github.com/openshift/svt.git /root/svt && \
     mkdir -p /usr/libexec/atomic-openshift && \
-    #git clone https://github.com/chaitanyaenr/files.git /root/files && \
-    #cd /root/files && git-lfs pull && \
-    #mv /root/files/extended.test /root/extended.test && \
     mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
     sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config && \
     touch /etc/sysconfig/network && \
