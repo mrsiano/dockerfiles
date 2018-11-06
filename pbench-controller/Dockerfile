@@ -10,7 +10,7 @@ RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release
     yum --enablerepo=ndokos-pbench install -y configtools openssh-clients pbench-agent \
     iproute sysvinit-tools openssh-server git ansible which  bind-utils blktrace ethtool findutils \
     gnuplot golang httpd-tools hwloc iotop iptables-services kernel ltrace mailx maven netsniff-ng \
-    net-tools ntp ntpdate numactl pciutils perf python-docker-py python-flask python-pip python-rbd \
+    net-tools ntp ntpdate numactl pciutils jq perf python-docker-py python-flask python-pip python-rbd \
     python2-boto3 powertop psmisc rpm-build screen sos strace tar tcpdump tmux vim-enhanced xauth wget git-lfs \
     yum-utils rpmdevtools ceph-common glusterfs-fuse iscsi-initiator-utils openssh-server openssh-clients initscripts && \
     yum clean all && \
@@ -24,7 +24,8 @@ RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release
     mv openshift*/oc /usr/local/bin && \
     rm -rf openshift-origin-client-tools-* && \
     git clone https://github.com/distributed-system-analysis/pbench.git /root/pbench && \
-    git clone https://github.com/openshift/svt.git /root/svt && \
+    git clone https://github.com/chaitanyaenr/svt.git /root/svt && cd /root/svt && git checkout tooling && \
+    git clone https://github.com/chaitanyaenr/scale-cd-jobs.git /root/scale-cd-jobs && \ 
     mkdir -p /usr/libexec/atomic-openshift && \
     mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
     sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config && \
@@ -39,4 +40,6 @@ COPY pbench.service /etc/systemd/system/pbench.service
 COPY run.sh /root/run.sh
 RUN chmod +x /root/run.sh
 RUN systemctl enable pbench.service
+RUN mkdir -p /run/systemd/system
+
 ENTRYPOINT ["/usr/sbin/init"]

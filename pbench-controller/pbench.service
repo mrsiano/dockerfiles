@@ -3,9 +3,8 @@ Description=pbench daemon
 After=sshd.service
 
 [Service]
-EnvironmentFile=/root/vars
+EnvironmentFile=/proc/1/environ
 ExecStart=/root/run.sh
-StandardOutput=journal+console
 
 [Install]
 WantedBy=multi-user.target
