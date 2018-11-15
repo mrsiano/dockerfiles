@@ -27,7 +27,7 @@ RUN yum clean all && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release
     git clone https://github.com/chaitanyaenr/svt.git /root/svt && cd /root/svt && git checkout tooling && \
     git clone https://github.com/chaitanyaenr/scale-cd-jobs.git /root/scale-cd-jobs && \ 
     mkdir -p /usr/libexec/atomic-openshift && \
-    mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
+    #mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
     echo "source /opt/pbench-agent/profile" >> ~/.bashrc && source ~/.bashrc && \
     sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config && \
     touch /etc/sysconfig/network && \
@@ -40,9 +40,10 @@ EXPOSE 2022 9090
 COPY pbench.service /etc/systemd/system/pbench.service
 COPY run.sh /root/run.sh
 COPY config /root/.ssh/config
+COPY pbench-agent.cfg /opt/pbench-agent/config/pbench-agent.cfg
+COPY pbench-agent-default.cfg /opt/pbench-agent/config/pbench-agent-default.cfg
 RUN chmod +x /root/run.sh
 RUN systemctl enable pbench.service
 RUN mkdir -p /run/systemd/system
-
 
 ENTRYPOINT ["/usr/sbin/init"]
