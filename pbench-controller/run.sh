@@ -64,6 +64,13 @@ elif [[ $JOB == "mongo" ]]; then
 elif [[ $JOB == "test" ]]; then
 	echo "sleeping forever"
 	source /opt/pbench-agent/profile; sleep infinity
+elif [[ $JOB == "byo" ]]; then
+	echo "Running the script located at $BYO_SCRIPT_PATH"
+	if [[ ! -f "$BYO_SCRIPT_PATH" ]]; then
+		echo "Looks like $BYO_SCRIPT_PATH doesn't exist, please check"
+		exit 1
+	fi
+	source /opt/pbench-agent/profile; chmod +x $BYO_SCRIPT_PATH; $BYO_SCRIPT_PATH
 else
 	echo "$JOB does not match any of the supported options, please check"
 	exit 1
