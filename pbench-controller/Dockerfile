@@ -25,7 +25,10 @@ RUN yum --skip-broken clean all && rpm -ivh https://dl.fedoraproject.org/pub/epe
     rm -rf openshift-origin-client-tools-* && \
     git clone https://github.com/chaitanyaenr/pbench.git /root/pbench && cd /root/pbench && git checkout ports && \
     git clone https://github.com/chaitanyaenr/svt.git /root/svt && cd /root/svt && git checkout containerozed_tooling && \
-    git clone https://github.com/chaitanyaenr/scale-cd-jobs.git /root/scale-cd-jobs && \ 
+    git clone https://github.com/chaitanyaenr/scale-cd-jobs.git /root/scale-cd-jobs && \
+    git clone https://github.com/akrzos/svt.git /tmp/svt && cd /tmp/svt && git checkout network_performance_ocp4_0 && rm -rf /root/svt/networking && mv /tmp/svt/networking /root/svt/ && cd /root && \
+    wget https://github.com/redhat-performance/pbench-analyzer/releases/download/v0.21-beta/pbcompare -O /usr/local/bin/pbcompare && chmod 0755 /usr/local/bin/pbcompare && \
+    wget https://github.com/redhat-performance/pbench-analyzer/releases/download/v0.21-beta/pbscraper -O /usr/local/bin/pbscraper && chmod 0755 /usr/local/bin/pbscraper && \
     mkdir -p /usr/libexec/atomic-openshift && \
     #mv /opt/pbench-agent/config/pbench-agent.cfg.example /opt/pbench-agent/config/pbench-agent.cfg && \
     echo "source /opt/pbench-agent/profile" >> ~/.bashrc && source ~/.bashrc && \

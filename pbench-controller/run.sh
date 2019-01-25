@@ -5,7 +5,8 @@
 . /etc/profile.d/pbench-agent.sh
 mkdir -p /var/lib/pbench-agent/tools-default
 cp /root/.ssh/id_rsa /opt/pbench-agent/id_rsa
-. /opt/pbench-agent/profile
+source /opt/pbench-agent/profile
+bash
 
 # Config options
 sed -i "/^pbench_results_redirector/c pbench_results_redirector = ${PBENCH_SERVER}" /opt/pbench-agent/config/pbench-agent.cfg
@@ -17,6 +18,11 @@ sed -i "/^github_token/c github_token=${SCALE_CI_RESULTS_TOKEN}" /root/svt/utils
 
 # Set ansible ssh port
 sed -i "/^#remote_port/c remote_port = 2022" /etc/ansible/ansible.cfg
+
+# Clone svt private repo
+if [[ -n "$SVT_PRIVATE_GITHUB_TOKEN" ]]; then
+	git clone https://$SVT_PRIVATE_GITHUB_TOKEN@github.com/openshift/svt-private /root/svt-private
+fi
 
 # Setup tooling
 if [[ $JOB == "tooling" ]]; then
@@ -38,7 +44,6 @@ elif [[ $JOB == "deployments_per_ns" ]]; then
         cd /root/scale-cd-jobs/build-scripts
 	source /opt/pbench-agent/profile; ./cluster_limits_deployments_per_ns.sh $SETUP_PBENCH $CONTAINERIZED $CLEAR_RESULTS $MOVE_RESULTS $TOOLING_INVENTORY $DEPLOYMENTS
 elif [[ $JOB == "networking" ]]; then
-	git clone https://${SVT_PRIVATE_TOKEN}@github.com/openshift/svt-private.git /root/svt-private
 	cd /root/svt/networking/synthetic
 	source /opt/pbench-agent/profile; ./start-network-test.sh $MODE $SKIP_REGISTER_PBENCH
 elif [[ $JOB == "pgbench" ]]; then

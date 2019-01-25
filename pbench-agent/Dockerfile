@@ -23,6 +23,8 @@ EXPOSE 2022
 
 # Mount /proc
 COPY mount.sh /root/mount.sh
+COPY prometheus-metrics-datalog /opt/pbench-agent/tool-scripts/datalog/prometheus-metrics-datalog
+RUN chmod +x /opt/pbench-agent/tool-scripts/datalog/prometheus-metrics-datalog
 RUN chmod +x /root/mount.sh
 COPY pbench.service /etc/systemd/system/pbench.service
 RUN systemctl enable pbench.service
