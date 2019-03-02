@@ -1,4 +1,6 @@
-#Dockerfile for pbench-controller
+FROM openshift/origin-tests:v4.0
+
+# Dockerfile for pbench-controller
 FROM centos/tools
 MAINTAINER Naga Ravi Chaitanya Elluri <nelluri@redhat.com>
 
@@ -50,5 +52,6 @@ COPY pbench-agent-default.cfg /opt/pbench-agent/config/pbench-agent-default.cfg
 RUN chmod +x /root/run.sh
 RUN systemctl enable pbench.service
 RUN mkdir -p /run/systemd/system
+COPY --from=0 /bin/openshift-tests /bin/openshift-tests
 
 ENTRYPOINT ["/usr/sbin/init"]
