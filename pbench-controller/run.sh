@@ -57,15 +57,29 @@ elif [[ $JOB == "pgbench" ]]; then
     	chmod +x pgbench_test.sh
     	chmod +x runpgbench.sh
 	source /opt/pbench-agent/profile; ./runpgbench.sh $NAMESPACE $TRANSACTIONS $TEMPLATE $VOLUME_CAPACITY $MEMORY_LIMIT $ITERATIONS $MODE $CLIENTS $THREADS $SCALING $STORAGECLASS $PBENCHCONFIG
+elif [[ $JOB == "svt_prometheus_scaling" ]]; then
+	# create template with storage class support
+        # cleanup leftovers if any.
+        rm -rf /tmp/jenkins_prometheus/
+
+        # init the working dir.
+        mkdir -p /tmp/jenkins_prometheus/
+        cd /tmp/jenkins_prometheus/
+        git clone https://github.com/openshift/svt.git
+        cd svt/openshift_scalability/ci/scripts/prometheus/
+        
+        # run the promethues_loader
+        chmod +x 'prometheus-loader.sh'
+        ./prometheus-loader.sh ${REFRESH_INTERVAL} ${CONCURRENCY} ${GRAPH_PERIOD} ${DURATION} ${ENABLE_PBENCH} '${PBENCH_COPY_RESULTS}' '${PBENCH_USER_BENCHMARK}' ${TEST_NAME}
 elif [[ $JOB == "http" ]]; then
 	if [[ -d "/root/http-ci-tests" ]]; then
 		rm -rf /root/http-ci-tests
-	fi	
+	fi
 	git clone https://github.com/jmencak/http-ci-tests.git /root/http-ci-tests
 	cd /root/http-ci-tests
 	source /opt/pbench-agent/profile; . ./http-test.sh all
 elif [[ $JOB == "mongo" ]]; then
-	source /opt/pbench-agent/profile; 
+	source /opt/pbench-agent/profile;
 elif [[ $JOB == "test" ]]; then
 	echo "sleeping forever"
 	source /opt/pbench-agent/profile; sleep infinity
