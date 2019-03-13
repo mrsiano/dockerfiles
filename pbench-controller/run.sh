@@ -67,10 +67,10 @@ elif [[ $JOB == "svt_prometheus_scaling" ]]; then
         cd /tmp/jenkins_prometheus/
         git clone https://github.com/openshift/svt.git
         cd svt/openshift_scalability/ci/scripts/prometheus/
-        
+
         # run the promethues_loader
         chmod +x 'prometheus-loader.sh'
-        ./prometheus-loader.sh ${REFRESH_INTERVAL} ${CONCURRENCY} ${GRAPH_PERIOD} ${DURATION} ${ENABLE_PBENCH} '${PBENCH_COPY_RESULTS}' '${PBENCH_USER_BENCHMARK}' ${TEST_NAME}
+        ./prometheus-loader.sh ${REFRESH_INTERVAL} ${CONCURRENCY} ${GRAPH_PERIOD} ${DURATION} ${TEST_NAME}
 elif [[ $JOB == "http" ]]; then
 	if [[ -d "/root/http-ci-tests" ]]; then
 		rm -rf /root/http-ci-tests
